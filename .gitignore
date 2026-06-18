@@ -1,0 +1,11 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+desktop.ini
+*~
+
+# 変換用の作業スクリプト（成果物ではない）
+_convert.cjs
+
+# Node（将来ビルドツールを入れた場合）
+node_modules/
