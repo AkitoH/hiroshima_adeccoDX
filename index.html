@@ -1,12 +1,11 @@
 <!DOCTYPE html>
-<html lang="ja">
-<head>
+<html lang="ja"><head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>令和8年度 広島県 生成AI経営支援モデル実証 ／ 参加募集</title>
 <meta name="description" content="商工会・商工会議所の経営指導員向け 生成AI経営支援モデル実証の参加募集ページ（令和8年度 広島県DX関連事業）。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Zen+Kaku+Gothic+New:wght@500;700;900&display=swap" rel="stylesheet">
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
@@ -15,17 +14,59 @@
   ::selection{background:oklch(0.62 0.13 232 / .25)}
   @keyframes gridmove{from{background-position:0 0}to{background-position:56px 56px}}
   @keyframes pulse{0%,100%{opacity:.35}50%{opacity:.9}}
-  @keyframes rise{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
-  .reveal{animation:rise .8s cubic-bezier(.16,.84,.44,1) both}
-  @supports (animation-timeline: view()){
-    .reveal{animation-timeline:view();animation-range:entry 0% cover 26%}
-  }
-  @media (prefers-reduced-motion: reduce){ .reveal{animation:none} }
+  @keyframes sheen{0%{transform:translateX(-120%) skewX(-18deg)}60%,100%{transform:translateX(260%) skewX(-18deg)}}
 
-  @media (min-width:901px){ .navlink{ display:inline !important } }
+  /* scroll progress */
+  #progress{position:fixed;top:0;left:0;height:3px;width:0;z-index:60;background:linear-gradient(90deg,oklch(0.62 0.13 232),oklch(0.8 0.12 200));box-shadow:0 0 14px oklch(0.62 0.13 232 / .55);transition:width .08s linear}
+
+  /* nav scroll state */
+  nav{transition:padding .35s ease,background .35s ease,box-shadow .35s ease,border-color .35s ease}
+  nav.scrolled{padding-top:9px;padding-bottom:9px;background:oklch(0.985 0.006 250 / .94);box-shadow:0 8px 28px oklch(0.4 0.05 258 / .09)}
+  .navlink{position:relative;transition:color .25s ease}
+  .navlink::after{content:"";position:absolute;left:0;right:100%;bottom:-6px;height:2px;border-radius:2px;background:oklch(0.62 0.13 232);transition:right .32s cubic-bezier(.16,.84,.44,1)}
+  .navlink:hover{color:oklch(0.42 0.13 256)}
+  .navlink:hover::after,.navlink.active::after{right:0}
+  .navlink.active{color:oklch(0.42 0.13 256)}
+
+  /* reveal system (JS driven, all-browser) */
+  .js .reveal{opacity:0;transform:translateY(34px);transition:opacity .8s cubic-bezier(.16,.84,.44,1),transform .8s cubic-bezier(.16,.84,.44,1);will-change:opacity,transform}
+  .js .reveal[data-dir="left"]{transform:translateX(-48px)}
+  .js .reveal[data-dir="right"]{transform:translateX(48px)}
+  .js .reveal[data-dir="scale"]{transform:scale(.93)}
+  .js .reveal.is-in{opacity:1;transform:none}
+
+  /* H-BARS grow */
+  .js .bar-grow{transform:scaleY(0);transform-origin:bottom;transition:transform 1s cubic-bezier(.16,.84,.44,1)}
+  .js .bar-grow.is-in{transform:scaleY(1)}
+
+  /* hover lift */
+  .lift{transition:transform .4s cubic-bezier(.16,.84,.44,1),box-shadow .4s cubic-bezier(.16,.84,.44,1)}
+  .lift:hover{transform:translateY(-6px);box-shadow:0 20px 46px oklch(0.4 0.06 258 / .15)}
+
+  /* task chips */
+  .chip{transition:transform .3s cubic-bezier(.16,.84,.44,1),box-shadow .3s ease,border-color .3s ease}
+  .chip:hover{transform:translateY(-3px) scale(1.04);border-color:oklch(0.62 0.13 232 / .55);box-shadow:0 10px 22px oklch(0.5 0.1 235 / .2)}
+
+  /* CTA buttons */
+  .btn{position:relative;overflow:hidden;transition:transform .3s ease,box-shadow .3s ease}
+  .btn:hover{transform:translateY(-2px)}
+  .btn>.sheen{position:absolute;top:0;bottom:0;left:0;width:38%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.5),transparent);transform:translateX(-120%) skewX(-18deg);pointer-events:none}
+  .btn:hover>.sheen{animation:sheen .9s ease}
+  .btn .arrow{display:inline-block;transition:transform .3s ease}
+  .btn:hover .arrow{transform:translateX(5px)}
+
+  @media (prefers-reduced-motion: reduce){
+    .js .reveal,.js .bar-grow{opacity:1 !important;transform:none !important;transition:none}
+    .lift,.chip,.btn,.navlink::after{transition:none}
+    *{animation-duration:.001ms !important;animation-iteration-count:1 !important}
+  }
+
+  @media (min-width:901px){ .navlink{ display:inline-flex !important } }
 </style>
 </head>
+
 <body>
+<div id="progress"></div>
 <div id="page-root" style="position:relative">
 
 <!-- NAV -->
@@ -43,7 +84,7 @@
 </nav>
 
 <!-- HERO -->
-<header style="position:relative;padding:clamp(120px,16vh,180px) clamp(20px,5vw,64px) clamp(64px,8vh,110px);overflow:hidden;background:oklch(0.24 0.05 258)">
+<header data-hero="" style="position:relative;padding:clamp(120px,16vh,180px) clamp(20px,5vw,64px) clamp(64px,8vh,110px);overflow:hidden;background:oklch(0.24 0.05 258)">
   <div style="position:absolute;inset:0;background-image:linear-gradient(oklch(0.62 0.13 232 / .09) 1px,transparent 1px),linear-gradient(90deg,oklch(0.62 0.13 232 / .09) 1px,transparent 1px);background-size:56px 56px;animation:gridmove 14s linear infinite;mask-image:radial-gradient(ellipse 80% 70% at 70% 20%,#000,transparent)"></div>
   <div style="position:absolute;top:-12%;right:-8%;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,oklch(0.62 0.13 232 / .28),transparent 65%);filter:blur(20px)"></div>
   <div style="position:relative;max-width:1180px;margin:0 auto">
@@ -83,7 +124,7 @@
 
     <div style="margin-top:56px;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:32px;align-items:stretch">
       <!-- problems -->
-      <div class="reveal" style="background:oklch(0.96 0.012 250);border:1px solid oklch(0.9 0.015 250);border-radius:18px;padding:34px">
+      <div class="reveal" data-dir="left" style="background:oklch(0.96 0.012 250);border:1px solid oklch(0.9 0.015 250);border-radius:18px;padding:34px">
         <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;color:oklch(0.55 0.06 256);margin-bottom:20px">先行事業で判明した 3つの課題</div>
         <div style="display:flex;flex-direction:column;gap:14px">
           <div style="display:flex;gap:14px;align-items:center;font-size:16px;font-weight:600;color:oklch(0.3 0.03 256)"><span style="flex:none;width:9px;height:9px;border-radius:2px;background:oklch(0.62 0.14 28);transform:rotate(45deg)"></span>属人化</div>
@@ -92,7 +133,7 @@
         </div>
       </div>
       <!-- requirements -->
-      <div class="reveal" style="background:linear-gradient(160deg,oklch(0.28 0.05 258),oklch(0.22 0.05 260));border-radius:18px;padding:34px;color:#fff;position:relative;overflow:hidden">
+      <div class="reveal" data-dir="right" style="background:linear-gradient(160deg,oklch(0.28 0.05 258),oklch(0.22 0.05 260));border-radius:18px;padding:34px;color:#fff;position:relative;overflow:hidden">
         <div style="position:absolute;top:-40px;right:-40px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,oklch(0.62 0.13 232 / .35),transparent 70%)"></div>
         <div style="position:relative;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;color:oklch(0.8 0.07 232);margin-bottom:20px">本実証が満たす 4つの要件</div>
         <div style="position:relative;display:flex;flex-direction:column;gap:14px">
@@ -119,7 +160,7 @@
         県内企業の約半数がDX未着手で、取組層も「紙のデジタル化」等の初期段階にとどまります。事業者を支援する経営指導員の生成AI活用力を高めれば、その効果は管内事業者の支援にそのまま還元されます。
       </p>
     </div>
-    <div class="reveal" style="display:flex;flex-direction:column;gap:18px">
+    <div class="reveal" data-dir="right" style="display:flex;flex-direction:column;gap:18px">
       <div style="display:flex;align-items:center;gap:20px;background:oklch(0.28 0.05 258);border:1px solid oklch(0.4 0.04 258);border-radius:14px;padding:22px 26px">
         <div style="font-family:'IBM Plex Mono',monospace;font-size:40px;font-weight:600;color:oklch(0.78 0.12 232);line-height:1">約½</div>
         <div style="font-size:14px;line-height:1.6;color:oklch(0.82 0.02 250)">県内企業の<b style="color:#fff">約半数がDX未着手</b>。取組層も初期段階にとどまる。</div>
@@ -185,7 +226,7 @@
       日々の業務が、こう変わる。
     </h2>
     <div style="margin-top:48px;display:flex;flex-direction:column;gap:16px">
-      <div class="reveal" style="display:grid;grid-template-columns:1fr;gap:0;background:#fff;border-radius:16px;overflow:hidden;border:1px solid oklch(0.9 0.015 250)" data-ba>
+      <div class="reveal" style="display:grid;grid-template-columns:1fr;gap:0;background:#fff;border-radius:16px;overflow:hidden;border:1px solid oklch(0.9 0.015 250)" data-ba="">
         <div style="display:grid;grid-template-columns:minmax(120px,0.7fr) 1fr 1fr">
           <div style="padding:16px 22px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.06em;color:oklch(0.5 0.06 256);background:oklch(0.97 0.01 250)">業務</div>
           <div style="padding:16px 22px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.06em;color:oklch(0.55 0.06 256);background:oklch(0.94 0.012 256);border-left:1px solid oklch(0.9 0.015 250)">BEFORE 今</div>
@@ -312,7 +353,7 @@
       到達度を、5段階で可視化する。
     </h2>
     <p class="reveal" style="margin-top:20px;font-size:14px;color:oklch(0.45 0.03 256)">H-BARS（広島県商工団体版 AI Readiness Score）／個人レベル　— 優劣評価ではなく、到達確認・追加支援・R9展開設計に活用します。</p>
-    <div class="reveal" style="margin-top:44px;display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;align-items:end">
+    <div class="reveal" data-bars="" style="margin-top:44px;display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;align-items:end">
       <div style="display:flex;flex-direction:column;gap:10px"><div style="height:70px;border-radius:10px 10px 0 0;background:oklch(0.86 0.04 232)"></div><div style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:oklch(0.55 0.06 256)">LV.1</div><div style="font-weight:700;font-size:15px;color:oklch(0.26 0.04 256)">理解・試行</div></div>
       <div style="display:flex;flex-direction:column;gap:10px"><div style="height:108px;border-radius:10px 10px 0 0;background:oklch(0.78 0.07 232)"></div><div style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:oklch(0.55 0.06 256)">LV.2</div><div style="font-weight:700;font-size:15px;color:oklch(0.26 0.04 256)">実務利用</div></div>
       <div style="display:flex;flex-direction:column;gap:10px"><div style="height:146px;border-radius:10px 10px 0 0;background:oklch(0.66 0.11 235)"></div><div style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:oklch(0.55 0.06 256)">LV.3</div><div style="font-weight:700;font-size:15px;color:oklch(0.26 0.04 256)">実務組込</div></div>
@@ -474,13 +515,17 @@
 
 <script>
   (function () {
+    var root = document.documentElement;
+    root.classList.add('js');
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    /* ---------- FAQ accordion ---------- */
     document.querySelectorAll('.faq-item').forEach(function (item) {
       var btn = item.querySelector('.faq-btn');
       var panel = item.querySelector('.faq-panel');
       var sign = item.querySelector('.faq-sign');
       btn.addEventListener('click', function () {
         var isOpen = panel.style.maxHeight && panel.style.maxHeight !== '0px';
-        // close all
         document.querySelectorAll('.faq-item').forEach(function (o) {
           o.querySelector('.faq-panel').style.maxHeight = '0px';
           o.querySelector('.faq-sign').textContent = '+';
@@ -493,7 +538,92 @@
         }
       });
     });
+
+    /* ---------- micro-interaction hooks ---------- */
+    // task chips
+    document.querySelectorAll('#method [style*="border-radius:100px"]').forEach(function (el) {
+      el.classList.add('chip');
+    });
+    // hover-lift cards (rounded, not full-width tables)
+    document.querySelectorAll('[style*="border-radius:18px"],[style*="border-radius:16px"]').forEach(function (el) {
+      var w = el.offsetWidth;
+      if (w > 0 && w <= 720 && !el.querySelector('[data-ba],.faq-btn')) el.classList.add('lift');
+    });
+    // CTA buttons: sheen + arrow nudge
+    document.querySelectorAll('a[style*="box-shadow:0 8px 30px"]').forEach(function (a) {
+      a.classList.add('btn');
+      a.innerHTML = a.innerHTML.replace('→', '<span class="arrow">→</span>');
+      var s = document.createElement('span');
+      s.className = 'sheen';
+      a.appendChild(s);
+    });
+
+    /* ---------- reveal-on-scroll (stagger + direction) ---------- */
+    var groups = new Map();
+    document.querySelectorAll('.reveal').forEach(function (el) {
+      var p = el.parentElement;
+      var arr = groups.get(p) || [];
+      arr.push(el);
+      groups.set(p, arr);
+    });
+    groups.forEach(function (arr) {
+      arr.forEach(function (el, i) { el.style.transitionDelay = (i * 90) + 'ms'; });
+    });
+
+    var pendingReveal = [].slice.call(document.querySelectorAll('.reveal'));
+
+    /* ---------- H-BARS grow ---------- */
+    var bars = document.querySelectorAll('[data-bars] > div > div:first-child');
+    bars.forEach(function (b, i) { b.classList.add('bar-grow'); b.style.transitionDelay = (i * 110) + 'ms'; });
+    var pendingBars = [].slice.call(bars);
+
+    /* ---------- scroll-driven: progress, nav, parallax, active link ---------- */
+    var nav = document.querySelector('nav');
+    var progress = document.getElementById('progress');
+    var heroLayers = document.querySelectorAll('header[data-hero] > div');
+    var sections = [].slice.call(document.querySelectorAll('section[id]'));
+    var navlinks = [].slice.call(document.querySelectorAll('.navlink'));
+    var ticking = false;
+
+    function onScroll() {
+      var y = window.pageYOffset || document.documentElement.scrollTop;
+      var vh = window.innerHeight;
+      var h = document.documentElement.scrollHeight - vh;
+      if (progress) progress.style.width = (h > 0 ? (y / h * 100) : 0) + '%';
+      if (nav) nav.classList.toggle('scrolled', y > 20);
+      if (!reduce) {
+        if (heroLayers[0]) heroLayers[0].style.transform = 'translateY(' + (y * 0.12) + 'px)';
+        if (heroLayers[1]) heroLayers[1].style.transform = 'translate(' + (y * -0.04) + 'px,' + (y * 0.18) + 'px)';
+      }
+      // rect-based reveal (no IntersectionObserver dependency)
+      if (reduce) {
+        pendingReveal.forEach(function (el) { el.classList.add('is-in'); });
+        pendingBars.forEach(function (el) { el.classList.add('is-in'); });
+        pendingReveal = []; pendingBars = [];
+      } else {
+        var trig = vh * 0.88;
+        pendingReveal = pendingReveal.filter(function (el) {
+          var t = el.getBoundingClientRect().top;
+          if (t < trig) { el.classList.add('is-in'); return false; }
+          return true;
+        });
+        pendingBars = pendingBars.filter(function (el) {
+          var r = el.getBoundingClientRect();
+          if (r.top < vh * 0.92) { el.classList.add('is-in'); return false; }
+          return true;
+        });
+      }
+      var cur = '';
+      sections.forEach(function (s) { if (s.getBoundingClientRect().top <= 130) cur = s.id; });
+      navlinks.forEach(function (l) { l.classList.toggle('active', l.getAttribute('href') === '#' + cur); });
+      ticking = false;
+    }
+    window.addEventListener('scroll', function () {
+      if (!ticking) { requestAnimationFrame(onScroll); ticking = true; }
+    }, { passive: true });
+    onScroll();
   })();
 </script>
-</body>
-</html>
+
+
+</body></html>
