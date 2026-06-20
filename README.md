@@ -16,7 +16,7 @@
 1. このフォルダを GitHub リポジトリへ push
 2. リポジトリの **Settings → Pages**
 3. **Source** を `Deploy from a branch`、Branch を `main` / `/(root)` に設定
-4. 数分後 `https://<ユーザー名>.github.io/<リポジトリ名>/` で公開
+4. [数分後 `https://<ユーザー名>.github.io/<リポジトリ名>/`](https://akitoh.github.io/hiroshima_adeccoDX/) で公開
 
 ## 編集メモ
 
